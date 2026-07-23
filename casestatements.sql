@@ -44,3 +44,23 @@ from sales.Customers as c
 
 
 ---------------HANDLING NULLS-------
+select 
+c.CustomerID,
+c.LastName,
+case when score is null then 0 else score end scoreclean,
+avg(case when score is null then 0 else score end ) over() avgcusto,
+avg(score) over()  as scoreavg
+from sales.Customers as c
+
+--------------CONDITIONAL AGGREGATIONS-----------
+--COUNT CUSTOMER ORDER WITH SALES GREATER THAN 30------
+SELECT
+o.CustomerID,
+sum(case 
+when sales>30 then 1 else 0 end ) as avgabove30,
+count(*) totalorders
+from sales.orders as o
+group by CustomerID
+order by avgabove30 desc
+-----------------------------------------------------------
+

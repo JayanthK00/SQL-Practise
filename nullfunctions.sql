@@ -69,6 +69,19 @@ left join sales.orders as o
 on c.CustomerID=o.CustomerID
 where o.CustomerID is null
 
+---------------------------------------------------------------------
+------------space vs null vs empty string---------
+with orders as (
+select 1 id, 'a' category union
+select 2, null union
+select 3,'' union
+select 4, '   ' --------------hidden space---------
+)
 
-
-
+select *,
+datalength(category) as leng,
+datalength(trim(category)) as lengpolicy1,
+nullif(trim(category),'') as lengpolicy2,
+DATALENGTH(nullif(trim(category),'')) as lengpolicy2,
+coalesce(nullif(trim(category),''),'unknown') as policy3for_presentingreport
+from orders
