@@ -58,5 +58,62 @@ rank() over(order by o.sales asc) as ranksalesasc,
 rank() over(order by o.sales desc) as ranksalesdesc
 from sales.Orders as o 
 
----------------WINDOW FROMES()-----------------
+---------------WINDOW FRAMES()-----------------
+--------------------------------------------------------
+------------------------------------------------------
+select 
+o.OrderID,
+o.ProductID,
+o.OrderDate,
+o.OrderStatus,
+o.sales,
+sum(sales) over(partition by productid,orderstatus)
+from sales.Orders as o 
+
+with tempo as(
+select 
+o.OrderID,
+o.ProductID,
+o.OrderDate,
+o.OrderStatus,
+o.sales,
+sum(sales) over(partition by productid,orderstatus) as prodstat
+from sales.Orders as o )
+select 
+OrderID,
+ProductID,
+OrderDate,
+OrderStatus,
+sales,
+sum(prodstat) over(partition by productid),
+sum(sales) over(partition by productid,orderstatus) as prodstat
+from tempo
+
+--BUT USING WINDOW FRAME--
+select 
+o.OrderID,
+o.ProductID,
+o.OrderDate,
+o.OrderStatus,
+o.sales,
+sum(sales) over(),
+sum(sales) over(partition by productid,orderstatus order by orderstatus) as sumofprodandship,
+sum(sales) over(partition by productid,orderstatus order by orderstatus rows between unbounded preceding and unbounded following) winfun,
+sum(sales) over(partition by productid) prodslab
+from sales.Orders as o 
+where o.ProductID in (101,102)
+
+
+-----------RANK CUSTOMERS BASED ON THEIR TOTLA SALES----
+select 
+o.CustomerID,
+sum(sales),
+rank() over(order by sum(sales) desc) 
+from sales.orders as o
+group by o.CustomerID
+
+
+
+
+
 
