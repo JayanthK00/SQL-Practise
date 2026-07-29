@@ -116,3 +116,17 @@ from sales.orders as o )t
 SELECT 
 ntile(2) over(order by orderid) buckets,*
 from sales.orders
+
+
+--------------------------------------------------------------
+----------------------------------------------------------------
+---------------------------------------------------------------------------
+-------------CUME_DIST()--------------------------------------
+
+---PRODUCTS WITHIN 40% OF THE PRICES--
+select * from(
+SELECT Product,
+price,
+CUME_DIST() over(order by price desc) distrank
+from sales.Products)t
+where distrank <= 0.4
