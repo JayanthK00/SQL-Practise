@@ -51,4 +51,71 @@ from sales.orders as o
 where o.customerid in
 (select c.CustomerID from sales.Customers as c where c.Country='germany')
 
+----------------------------------------------------
+--find female emp whose sal > male emp (IF ANY IN WHERE CLAUSE)
+select * from sales.Employees
+where gender='f' and salary > ANY
+(select salary from sales.Employees where gender='m')
+
+select * from sales.Employees
+where gender='f' and salary > ALL
+(select salary from sales.Employees where gender='m')
+
+-------------------------------------------------
+---------CORRELATED SUBQUERY-------------------
+select *, 
+(select 
+count(orderid) as totalorders
+from sales.orders as o
+where o.CustomerID=c.CustomerID)
+from sales.Customers as c
+
+-----------------------------------------------------------
+---------CORRELATED SUBQUERY IN WHEERE CLAUSE OF EXISTS OPERATOR---
+select * from sales.Orders as o where exists(
+select* from sales.Customers as c where country='germany'
+and o.CustomerID=c.CustomerID)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
