@@ -101,3 +101,56 @@ on crank.CustomerID=c.CustomerID
 left join cteseg as cteseg
 on cteseg.CustomerID=c.CustomerID
 
+-----RECURSIVE CTE-----
+with cte_recur as (
+select 1 as mynumber
+union all
+select mynumber+1
+from cte_recur
+where mynumber<2000
+
+
+)---anchor
+--main query
+select * from cte_recur
+OPTION (MAXRECURSION 5000)
+
+----------------------------------------------------------
+with cte_one as(
+select 
+e.EmployeeID,
+e.FirstName,
+e.ManagerID,
+1 as level
+from sales.Employees as e
+where ManagerId is null
+
+union all
+
+select rq.EmployeeID,
+rq.FirstName,
+rq.ManagerID,
+level+1
+from sales.Employees as rq
+inner join cte_one as cte_one
+on rq.ManagerID=cte_one.EmployeeID
+)
+select * from cte_one
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
