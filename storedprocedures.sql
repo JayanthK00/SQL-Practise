@@ -44,7 +44,7 @@ alter procedure totalcusto @country nvarchar(50) = 'usa'
 as 
 begin 
 
-declare @totalcustomers int.
+declare @totalcustomers int,
 		@avgscore float;
 
 select 
@@ -53,8 +53,8 @@ select
 from sales.Customers as c
 where country=@country
 
-print'total customers from ' +@country ':'+
-print'average score from :'+@country+':'+
+print'total customers from ' +@country +':'+ CAST(@totalcustomers AS nvarchar);
+print'average score from '+@country+':'+ cast(@avgscore as nvarchar);
 
 select 
 count(orderid) totalorders,
@@ -65,3 +65,5 @@ on c.customerid=o.CustomerID
 where country=@country
 
 end
+
+exec totalcusto
